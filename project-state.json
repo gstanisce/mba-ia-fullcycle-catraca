@@ -61,16 +61,16 @@
       "id": "F02",
       "name": "Eventos e vitrine",
       "dir": "docs/features/F02-eventos",
-      "status": "pending",
-      "branch": null,
-      "pr": null,
-      "latestReport": null
+      "status": "done",
+      "branch": "feat/F02-eventos",
+      "pr": "https://github.com/gstanisce/mba-ia-fullcycle-catraca/pull/2",
+      "latestReport": "docs/features/F02-eventos/reports/2026-11-25T0908Z-b4a97e7.md"
     },
     {
       "id": "F03",
       "name": "Compra e gateway",
       "dir": "docs/features/F03-compra-gateway",
-      "status": "pending",
+      "status": "in_progress",
       "branch": null,
       "pr": null,
       "latestReport": null
