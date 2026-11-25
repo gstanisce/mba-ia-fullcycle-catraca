@@ -18,7 +18,8 @@ seções, vitrine/`getOnSaleEvent`) e F03 (`applyGatewayResult` só altera `pend
   **Não** altere F03; prove com teste.
 - `src/features/cancellation/plugin.ts`:
   - Seção `cancel` (order 90, título `Cancelamento`): evento `published` → form `POST /organizer/events/:id/cancel` com
-    botão `Cancelar evento` e aviso de irreversível; `cancelled` → `<p class="cancelled">Evento cancelado</p>` sem botão;
+    botão `Cancelar evento` e aviso de irreversível; `cancelled` → sem botão, só o texto `Ingressos confirmados foram estornados e pendentes foram cancelados.`
+    (o rótulo `Evento cancelado` aparece uma única vez, na seção de edição de F02);
     `draft` → texto `Somente eventos publicados podem ser cancelados`.
   - `POST /organizer/events/:id/cancel` (`requireOrganizer` + `loadOwnedEvent`) → `cancelEvent` → `303` para a página
     de gestão (sucesso) ou re-render com `state.cancel = { message }` e 422.
