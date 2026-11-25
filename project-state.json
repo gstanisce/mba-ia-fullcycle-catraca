@@ -106,10 +106,10 @@
       "id": "F07",
       "name": "Painel do evento",
       "dir": "docs/features/F07-painel",
-      "status": "in_progress",
+      "status": "done",
       "branch": "feat/F07-painel",
-      "pr": null,
-      "latestReport": null
+      "pr": "https://github.com/gstanisce/mba-ia-fullcycle-catraca/pull/7",
+      "latestReport": "docs/features/F07-painel/reports/2026-11-25T1015Z-a654a33.md"
     }
   ]
 }
