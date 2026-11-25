@@ -10,6 +10,7 @@ Catraca: venda de ingressos para eventos pequenos. Leia este arquivo inteiro ant
 | Derrubar tudo | `bash scripts/down.sh` | remove containers e rede; `--purge` também apaga o volume do banco |
 | Gates | `bash scripts/gates.sh` | typecheck (`tsc`) + testes (`vitest`) num Postgres descartável, tudo em container |
 | Seed de novo | `bash scripts/seed.sh` | idempotente; precisa do produto no ar |
+| Fluxo do avaliador | `bash scripts/flow.sh` | passos 2–16 do brief contra o produto no ar (~3 min); precisa de Node, ou rode num container `node:24` com `--network host` |
 
 - Produto e API: `http://localhost:3000` (`CATRACA_PORT` muda a porta publicada).
 - Worktrees paralelas: use `COMPOSE_PROJECT_NAME=catraca-fXX CATRACA_PORT=30XX bash scripts/up.sh` para não colidir com a main.
