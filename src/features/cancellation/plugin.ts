@@ -5,7 +5,9 @@ import { requireOrganizer } from '../auth/guards.js';
 import { registerManagementSection, renderErrors, renderManagementPage, type ManagementSection } from '../events/management.js';
 import { loadOwnedEvent, sendEventNotFound } from '../events/ownership.js';
 import { MSG_EVENT_NOT_FOUND } from '../events/repo.js';
-import { cancelEvent, MSG_CANCELLED, MSG_ONLY_PUBLISHED_CANCELLABLE } from './service.js';
+import { cancelEvent, MSG_ONLY_PUBLISHED_CANCELLABLE } from './service.js';
+
+const MSG_CANCELLED_CONSEQUENCES = 'Ingressos confirmados foram estornados e pendentes foram cancelados.';
 
 /** Result of a refused cancel POST, kept in `state.cancel`. */
 export interface CancelSectionState {
@@ -20,7 +22,8 @@ export const cancelSection: ManagementSection = {
   render({ event, state }) {
     const st = state.cancel as CancelSectionState | undefined;
     const errors = renderErrors(st ? [st.message] : undefined);
-    if (event.status === 'cancelled') return html`${errors}<p class="cancelled">${MSG_CANCELLED}</p>`;
+    // `Evento cancelado` itself is shown once, by F02's edit section; here we only state the consequences.
+    if (event.status === 'cancelled') return html`${errors}<p>${MSG_CANCELLED_CONSEQUENCES}</p>`;
     if (event.status !== 'published') return html`${errors}<p>${MSG_ONLY_PUBLISHED_CANCELLABLE}</p>`;
     return html`${errors}
 <form method="post" action="/organizer/events/${event.id}/cancel" id="cancel-event">

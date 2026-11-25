@@ -113,7 +113,8 @@ describe('POST /organizer/events/:id/cancel', () => {
 
     const page = await get(`/organizer/events/${id}`, jarA);
     expect(page.statusCode).toBe(200);
-    expect(page.body).toContain('Evento cancelado');
+    expect(page.body.split('<p class="cancelled">Evento cancelado</p>')).toHaveLength(2); // shown exactly once
+    expect(page.body).toContain('Ingressos confirmados foram estornados e pendentes foram cancelados.');
     expect(page.body).not.toContain('id="edit-event"');
     expect(page.body).not.toContain('id="publish-event"');
     expect(page.body).not.toContain('id="cancel-event"');
