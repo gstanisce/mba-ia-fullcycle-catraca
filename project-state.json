@@ -79,35 +79,35 @@
       "id": "F04",
       "name": "API de parceiros",
       "dir": "docs/features/F04-api-parceiros",
-      "status": "in_progress",
+      "status": "done",
       "branch": "feat/F04-api-parceiros",
-      "pr": null,
-      "latestReport": null
+      "pr": "https://github.com/gstanisce/mba-ia-fullcycle-catraca/pull/6",
+      "latestReport": "docs/features/F04-api-parceiros/reports/2026-11-25T0953Z-7225186.md"
     },
     {
       "id": "F05",
       "name": "Check-in",
       "dir": "docs/features/F05-checkin",
-      "status": "in_progress",
+      "status": "done",
       "branch": "feat/F05-checkin",
-      "pr": null,
-      "latestReport": null
+      "pr": "https://github.com/gstanisce/mba-ia-fullcycle-catraca/pull/4",
+      "latestReport": "docs/features/F05-checkin/reports/2026-11-25T0949Z-d1bc413.md"
     },
     {
       "id": "F06",
       "name": "Cancelamento",
       "dir": "docs/features/F06-cancelamento",
-      "status": "in_progress",
+      "status": "done",
       "branch": "feat/F06-cancelamento",
-      "pr": null,
-      "latestReport": null
+      "pr": "https://github.com/gstanisce/mba-ia-fullcycle-catraca/pull/5",
+      "latestReport": "docs/features/F06-cancelamento/reports/2026-11-25T0951Z-9678f81.md"
     },
     {
       "id": "F07",
       "name": "Painel do evento",
       "dir": "docs/features/F07-painel",
-      "status": "pending",
-      "branch": null,
+      "status": "in_progress",
+      "branch": "feat/F07-painel",
       "pr": null,
       "latestReport": null
     }
