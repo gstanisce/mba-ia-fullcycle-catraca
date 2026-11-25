@@ -6,6 +6,7 @@ import { registerOrganizerEventRoutes } from './features/events/organizer-routes
 import { registerPublicEventRoutes } from './features/events/public-routes.js';
 import { startGatewayPoller } from './features/purchases/gateway.js';
 import { registerPurchaseRoutes } from './features/purchases/routes.js';
+import { registerCancellationRoutes } from './features/cancellation/plugin.js';
 
 /**
  * Builds the HTTP app. Each feature exposes a Fastify plugin under src/features/<area>/
@@ -24,6 +25,7 @@ export async function buildApp(opts: { logger?: boolean } = {}): Promise<Fastify
   registerOrganizerEventRoutes(app); // F02: /organizer area, event management page and its sections
   registerPurchaseRoutes(app); // F03: purchase slot, POST /events/:id/purchase, /my-tickets
   startGatewayPoller(app); // F03: delivers simulated gateway answers (onReady → start, onClose → stop)
+  registerCancellationRoutes(app); // F06: management section `Cancelamento` + POST /organizer/events/:id/cancel
 
   return app;
 }
