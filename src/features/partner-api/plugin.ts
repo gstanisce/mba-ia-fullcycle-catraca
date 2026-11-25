@@ -1,7 +1,7 @@
 // F04 — Partner API (fixed contract from the brief). Every route requires `X-Api-Key`.
 // Reuses F02 (listOnSaleEvents, availableSeats) and F03 (purchaseTicket, getTicketById): no seat or purchase logic here.
 import { timingSafeEqual } from 'node:crypto';
-import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyError, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { config } from '../../config.js';
 import { pool } from '../../db.js';
 import { toIsoWithOffset } from '../../lib/format.js';
@@ -26,7 +26,7 @@ export function isValidApiKey(given: unknown, expected: string = config.partnerA
 }
 
 /** Body parse failures (non-JSON, empty JSON body, unsupported media type…) → Fastify 400/415 errors. */
-function isBodyParseError(err: { code?: string; statusCode?: number }): boolean {
+function isBodyParseError(err: Pick<FastifyError, 'code' | 'statusCode'>): boolean {
   return (typeof err.code === 'string' && err.code.startsWith('FST_ERR_CTP_')) || err.statusCode === 400 || err.statusCode === 415;
 }
 
@@ -40,7 +40,7 @@ export async function partnerApiPlugin(app: FastifyInstance): Promise<void> {
   });
 
   // Never answer 400/415 for a bad body: the contract says 422 invalid_request.
-  app.setErrorHandler((err: { code?: string; statusCode?: number }, request, reply) => {
+  app.setErrorHandler((err: FastifyError, request, reply) => {
     if (isBodyParseError(err)) return reply.code(422).send({ error: 'invalid_request' });
     request.log.error(err);
     return reply.code(500).send({ error: 'internal_error' });
