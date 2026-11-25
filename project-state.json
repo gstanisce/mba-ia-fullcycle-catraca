@@ -100,7 +100,10 @@
       "status": "done",
       "branch": "feat/F06-cancelamento",
       "pr": "https://github.com/gstanisce/mba-ia-fullcycle-catraca/pull/5",
-      "latestReport": "docs/features/F06-cancelamento/reports/2026-11-25T0951Z-9678f81.md"
+      "latestReport": "docs/features/F06-cancelamento/reports/2026-11-25T1124Z-b4c9958.md",
+      "fixes": [
+        "https://github.com/gstanisce/mba-ia-fullcycle-catraca/pull/8"
+      ]
     },
     {
       "id": "F07",

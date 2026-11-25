@@ -59,7 +59,7 @@ Cada feature tem uma pasta com `spec.md`, `plan.md`, `contract.md` e `reports/`:
 | F03 Compra e gateway | 3 | [`docs/features/F03-compra-gateway`](docs/features/F03-compra-gateway) | [#3](https://github.com/gstanisce/mba-ia-fullcycle-catraca/pull/3) |
 | F04 API de parceiros | **4 (paralela)** | [`docs/features/F04-api-parceiros`](docs/features/F04-api-parceiros) | [#6](https://github.com/gstanisce/mba-ia-fullcycle-catraca/pull/6) |
 | F05 Check-in | **4 (paralela)** | [`docs/features/F05-checkin`](docs/features/F05-checkin) | [#4](https://github.com/gstanisce/mba-ia-fullcycle-catraca/pull/4) |
-| F06 Cancelamento | **4 (paralela)** | [`docs/features/F06-cancelamento`](docs/features/F06-cancelamento) | [#5](https://github.com/gstanisce/mba-ia-fullcycle-catraca/pull/5) |
+| F06 Cancelamento | **4 (paralela)** | [`docs/features/F06-cancelamento`](docs/features/F06-cancelamento) | [#5](https://github.com/gstanisce/mba-ia-fullcycle-catraca/pull/5), correção [#8](https://github.com/gstanisce/mba-ia-fullcycle-catraca/pull/8) |
 | F07 Painel do evento | 5 | [`docs/features/F07-painel`](docs/features/F07-painel) | [#7](https://github.com/gstanisce/mba-ia-fullcycle-catraca/pull/7) |
 
 ### PRs da wave paralela (wave 4)
