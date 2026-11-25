@@ -1,0 +1,35 @@
+# Product stack. Started by scripts/up.sh, stopped by scripts/down.sh.
+# The project name can be overridden with COMPOSE_PROJECT_NAME (used by parallel worktrees).
+name: catraca
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: catraca
+      POSTGRES_PASSWORD: catraca
+      POSTGRES_DB: catraca
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U catraca -d catraca"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  app:
+    build: .
+    environment:
+      PORT: "3000"
+      DATABASE_URL: postgres://catraca:catraca@db:5432/catraca
+      PARTNER_API_KEY: ${PARTNER_API_KEY:-catraca-partner-key-dev}
+      GATEWAY_MODE: simulated
+      GATEWAY_DELAY_SCALE: ${GATEWAY_DELAY_SCALE:-1}
+    ports:
+      - "${CATRACA_PORT:-3000}:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  dbdata:

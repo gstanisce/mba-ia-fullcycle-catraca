@@ -1,0 +1,21 @@
+{
+  "project": "catraca",
+  "prd": "docs/PRD.md",
+  "statusLegend": ["pending", "in_progress", "in_review", "needs_fix", "done"],
+  "waves": [
+    { "wave": 1, "features": ["F01"], "parallel": false },
+    { "wave": 2, "features": ["F02"], "parallel": false },
+    { "wave": 3, "features": ["F03"], "parallel": false },
+    { "wave": 4, "features": ["F04", "F05", "F06"], "parallel": true },
+    { "wave": 5, "features": ["F07"], "parallel": false }
+  ],
+  "features": [
+    { "id": "F01", "name": "Plataforma e contas", "dir": "docs/features/F01-plataforma", "status": "pending", "branch": null, "pr": null, "latestReport": null },
+    { "id": "F02", "name": "Eventos e vitrine", "dir": "docs/features/F02-eventos", "status": "pending", "branch": null, "pr": null, "latestReport": null },
+    { "id": "F03", "name": "Compra e gateway", "dir": "docs/features/F03-compra-gateway", "status": "pending", "branch": null, "pr": null, "latestReport": null },
+    { "id": "F04", "name": "API de parceiros", "dir": "docs/features/F04-api-parceiros", "status": "pending", "branch": null, "pr": null, "latestReport": null },
+    { "id": "F05", "name": "Check-in", "dir": "docs/features/F05-checkin", "status": "pending", "branch": null, "pr": null, "latestReport": null },
+    { "id": "F06", "name": "Cancelamento", "dir": "docs/features/F06-cancelamento", "status": "pending", "branch": null, "pr": null, "latestReport": null },
+    { "id": "F07", "name": "Painel do evento", "dir": "docs/features/F07-painel", "status": "pending", "branch": null, "pr": null, "latestReport": null }
+  ]
+}

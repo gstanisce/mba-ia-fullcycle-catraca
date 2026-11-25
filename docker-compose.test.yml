@@ -1,0 +1,29 @@
+# Gates stack: throwaway Postgres (tmpfs) + the app image running typecheck and tests.
+# Used only by scripts/gates.sh, always with a unique project name, and removed afterwards.
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: catraca
+      POSTGRES_PASSWORD: catraca
+      POSTGRES_DB: catraca_test
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U catraca -d catraca_test"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  tests:
+    build: .
+    environment:
+      DATABASE_URL: postgres://catraca:catraca@db:5432/catraca_test
+      PARTNER_API_KEY: test-partner-key
+      GATEWAY_MODE: simulated
+      # Simulated gateway delays x0.01: 2-5s -> 20-50ms, 30-40s -> 300-400ms.
+      GATEWAY_DELAY_SCALE: "0.01"
+    command: ["npm", "run", "gates:inner"]
+    depends_on:
+      db:
+        condition: service_healthy
