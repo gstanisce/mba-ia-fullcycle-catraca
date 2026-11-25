@@ -78,7 +78,11 @@ describe('POST /organizer/events/:id/cancel', () => {
     expect((await post(`/events/${id}/purchase`, { cardNumber: '4000000000000003' }, jarU)).statusCode).toBe(303);
     expect((await post(`/events/${id}/purchase`, { cardNumber: '4000000000000001' }, jarU)).statusCode).toBe(303);
     const { '0003': t5, '0001': t6 } = await ticketIdsByCard(id);
+    // Keep T5's answer in the future until we cancel (the real window is 30–38 s; gates scale it to ~0.3 s).
+    await pool.query("UPDATE gateway_requests SET respond_at = now() + interval '1 second' WHERE ticket_id = $1", [t5]);
     expect((await waitForStatus(t6!)).status).toBe('confirmed'); // the app's poller delivers it
+    const { rows: t5rows } = await pool.query('SELECT status FROM tickets WHERE id = $1', [t5]);
+    expect(t5rows[0].status).toBe('pending');
 
     const res = await post(`/organizer/events/${id}/cancel`, {}, jarA);
     expect(res.statusCode).toBe(303);

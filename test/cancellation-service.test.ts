@@ -63,6 +63,11 @@ async function deliverAllGatewayAnswers(eventId: string): Promise<void> {
   expect(left).toHaveLength(0);
 }
 
+/** Keeps a slow (0003) answer in the future until the test cancels (gates scale 30–38 s down to ~0.3 s). */
+async function keepPending(ticketId: string): Promise<void> {
+  await pool.query("UPDATE gateway_requests SET respond_at = now() + interval '1 second' WHERE ticket_id = $1", [ticketId]);
+}
+
 const live = (statuses: string[]) => statuses.filter((s) => s === 'pending' || s === 'confirmed');
 
 describe('cancelEvent (F06-AC1, F06-AC2, R11)', () => {
@@ -71,6 +76,7 @@ describe('cancelEvent (F06-AC1, F06-AC2, R11)', () => {
     const event = await newEvent({ capacity: 5 });
     const t5 = await mustBuy(event.id, CARD_SLOW_OK); // gateway answers only after 30–38 s (scaled)
     const t6 = await mustBuy(event.id, CARD_FAST_OK);
+    await keepPending(t5);
     expect((await waitForStatus(t6, processDueGatewayResponses)).status).toBe('confirmed');
     expect((await getTicketById(pool, t5))!.status).toBe('pending');
 
@@ -87,7 +93,9 @@ describe('cancelEvent (F06-AC1, F06-AC2, R11)', () => {
     const event = await newEvent({ capacity: 5 });
     const t5 = await mustBuy(event.id, CARD_SLOW_OK);
     const t6 = await mustBuy(event.id, CARD_FAST_OK);
+    await keepPending(t5);
     expect((await waitForStatus(t6, processDueGatewayResponses)).status).toBe('confirmed');
+    expect((await getTicketById(pool, t5))!.status).toBe('pending');
     expect((await cancelEvent(event.id, orgA)).ok).toBe(true);
 
     await deliverAllGatewayAnswers(event.id); // t5's approval arrives after the cancellation
