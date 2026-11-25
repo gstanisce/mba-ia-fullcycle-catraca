@@ -27,7 +27,9 @@ export async function checkIn(eventId: string, rawCode: unknown): Promise<{ resu
   const code = normalizeCheckinCode(rawCode);
   const result = await withTransaction(async (client): Promise<CheckinResult> => {
     if (code === '') return 'invalid';
-    const ev = await client.query<{ status: string }>('SELECT status FROM events WHERE id = $1', [eventId]);
+    // FOR SHARE: a concurrent cancellation (F06 locks the event FOR UPDATE, then its tickets) cannot interleave;
+    // same lock order (event → ticket) as the cancellation, so no deadlock.
+    const ev = await client.query<{ status: string }>('SELECT status FROM events WHERE id = $1 FOR SHARE', [eventId]);
     const { rows } = await client.query<{ id: string; status: string; checked_in_at: Date | null }>(
       'SELECT id, status, checked_in_at FROM tickets WHERE code = $1 AND event_id = $2 FOR UPDATE',
       [code, eventId],
