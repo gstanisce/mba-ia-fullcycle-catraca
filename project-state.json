@@ -70,17 +70,17 @@
       "id": "F03",
       "name": "Compra e gateway",
       "dir": "docs/features/F03-compra-gateway",
-      "status": "in_progress",
-      "branch": null,
-      "pr": null,
-      "latestReport": null
+      "status": "done",
+      "branch": "feat/F03-compra-gateway",
+      "pr": "https://github.com/gstanisce/mba-ia-fullcycle-catraca/pull/3",
+      "latestReport": "docs/features/F03-compra-gateway/reports/2026-11-25T0927Z-f30f460.md"
     },
     {
       "id": "F04",
       "name": "API de parceiros",
       "dir": "docs/features/F04-api-parceiros",
-      "status": "pending",
-      "branch": null,
+      "status": "in_progress",
+      "branch": "feat/F04-api-parceiros",
       "pr": null,
       "latestReport": null
     },
@@ -88,8 +88,8 @@
       "id": "F05",
       "name": "Check-in",
       "dir": "docs/features/F05-checkin",
-      "status": "pending",
-      "branch": null,
+      "status": "in_progress",
+      "branch": "feat/F05-checkin",
       "pr": null,
       "latestReport": null
     },
@@ -97,8 +97,8 @@
       "id": "F06",
       "name": "Cancelamento",
       "dir": "docs/features/F06-cancelamento",
-      "status": "pending",
-      "branch": null,
+      "status": "in_progress",
+      "branch": "feat/F06-cancelamento",
       "pr": null,
       "latestReport": null
     },
