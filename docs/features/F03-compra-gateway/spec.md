@@ -29,12 +29,14 @@ Garantia extra de banco (defesa em profundidade, opcional): nenhuma — a trava 
 
 ### Gateway simulado — `src/features/purchases/gateway.ts`
 - `decideSimulated(cardNumber, rng = Math.random)` → `{ approved: boolean; delayMs: number }` pelo final:
-  `0001` aprovado 2000–5000 ms; `0002` recusado 2000–5000; `0003` aprovado 30000–40000; `0004` recusado 30000–40000;
-  outro → recusado 2000–5000. `delayMs` sorteado uniforme no intervalo e multiplicado por `config.gatewayDelayScale`.
+  `0001` aprovado 2000–4500 ms; `0002` recusado 2000–4500; `0003` aprovado 30000–38000; `0004` recusado 30000–38000;
+  outro → recusado 2000–4500. `delayMs` sorteado uniforme no intervalo e multiplicado por `config.gatewayDelayScale`.
+  As faixas ficam dentro das janelas do brief (2–5 s e 30–40 s) mas deixam margem para as verificações ponta a ponta
+  (intervalo do poller + latência HTTP/recarga): o avaliador confere "confirmado em até 5 s" e os fluxos de 45 s.
 - Migration `030_gateway_requests.sql`:
   `gateway_requests(ticket_id text PK REFERENCES tickets(id), approved boolean NOT NULL, respond_at timestamptz NOT NULL, delivered_at timestamptz)`.
   O "gateway externo" simulado guarda o pedido e sua resposta futura; isso sobrevive a restart do app.
-- Entrega assíncrona: `startGatewayPoller(app)` — `setInterval` de 200 ms (registrado em `onReady`, parado em `onClose`):
+- Entrega assíncrona: `startGatewayPoller(app)` — `setInterval` de 100 ms (registrado em `onReady`, parado em `onClose`):
   em transação, `SELECT … FROM gateway_requests WHERE delivered_at IS NULL AND respond_at <= now() ORDER BY respond_at
   LIMIT 50 FOR UPDATE SKIP LOCKED`; para cada um chama `applyGatewayResult(client, ticketId, approved)` e marca `delivered_at`.
   Evite reentrância (flag `running`).

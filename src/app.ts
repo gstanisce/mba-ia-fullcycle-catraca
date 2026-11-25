@@ -4,6 +4,8 @@ import cookie from '@fastify/cookie';
 import { registerAuth } from './features/auth/plugin.js';
 import { registerOrganizerEventRoutes } from './features/events/organizer-routes.js';
 import { registerPublicEventRoutes } from './features/events/public-routes.js';
+import { startGatewayPoller } from './features/purchases/gateway.js';
+import { registerPurchaseRoutes } from './features/purchases/routes.js';
 
 /**
  * Builds the HTTP app. Each feature exposes a Fastify plugin under src/features/<area>/
@@ -20,6 +22,8 @@ export async function buildApp(opts: { logger?: boolean } = {}): Promise<Fastify
   registerAuth(app); // F01: session hook (request.user) + signup/login/logout; root level, not encapsulated
   registerPublicEventRoutes(app); // F02: showcase / and /events/:id (purchase slot)
   registerOrganizerEventRoutes(app); // F02: /organizer area, event management page and its sections
+  registerPurchaseRoutes(app); // F03: purchase slot, POST /events/:id/purchase, /my-tickets
+  startGatewayPoller(app); // F03: delivers simulated gateway answers (onReady → start, onClose → stop)
 
   return app;
 }

@@ -362,6 +362,7 @@ describe('extension points for later features', () => {
     const id = await createE1();
     await post(`/organizer/events/${id}/publish`, {}, jarA);
     await insertTicket(id, 'confirmed');
+    setPurchaseSlot(null); // buildApp registers F03's slot; this test checks the bare extension point
     expect((await get(`/events/${id}`)).body).toContain('<div id="purchase-slot"></div>');
 
     setPurchaseSlot(({ event, user, available }) => html`<p>slot ${event.name} ${user?.name ?? 'visitante'} ${available}</p>`);
