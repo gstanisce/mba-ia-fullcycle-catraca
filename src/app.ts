@@ -23,6 +23,7 @@ export async function buildApp(opts: { logger?: boolean } = {}): Promise<Fastify
   registerPublicEventRoutes(app); // F02: showcase / and /events/:id (purchase slot)
   registerOrganizerEventRoutes(app); // F02: /organizer area, event management page and its sections
   registerPurchaseRoutes(app); // F03: purchase slot, POST /events/:id/purchase, /my-tickets
+  app.register(import('./features/partner-api/plugin.js'), { prefix: '/api/partner' }); // F04: partner API (X-Api-Key)
   startGatewayPoller(app); // F03: delivers simulated gateway answers (onReady → start, onClose → stop)
 
   return app;
