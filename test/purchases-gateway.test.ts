@@ -4,6 +4,7 @@ import { pool } from '../src/db.js';
 import {
   applyGatewayResult,
   decideSimulated,
+  GATEWAY_POLL_INTERVAL_MS,
   processDueGatewayResponses,
 } from '../src/features/purchases/gateway.js';
 import { purchaseTicket } from '../src/features/purchases/service.js';
@@ -27,12 +28,12 @@ const MID = () => 0.5;
 describe('decideSimulated by card ending (R08, F03-AC2)', () => {
   const s = config.gatewayDelayScale;
   const cases: Array<[string, boolean, number, number]> = [
-    ['0001', true, 2000, 5000],
-    ['0002', false, 2000, 5000],
-    ['0003', true, 30000, 40000],
-    ['0004', false, 30000, 40000],
-    ['0005', false, 2000, 5000],
-    ['9999', false, 2000, 5000],
+    ['0001', true, 2000, 4500],
+    ['0002', false, 2000, 4500],
+    ['0003', true, 30000, 38000],
+    ['0004', false, 30000, 38000],
+    ['0005', false, 2000, 4500],
+    ['9999', false, 2000, 4500],
   ];
   it.each(cases)('ending %s → approved=%s, delay %d–%d ms × scale', (last4, approved, min, max) => {
     expect(decideSimulated(card(last4), MIN)).toEqual({ approved, delayMs: min * s });
@@ -44,8 +45,13 @@ describe('decideSimulated by card ending (R08, F03-AC2)', () => {
     for (let i = 0; i < 200; i++) {
       const d = decideSimulated(card('0003'));
       expect(d.delayMs).toBeGreaterThanOrEqual(30000 * s);
-      expect(d.delayMs).toBeLessThanOrEqual(40000 * s);
+      expect(d.delayMs).toBeLessThanOrEqual(38000 * s);
     }
+  });
+
+  it('poll interval is 100 ms; max fast delay + interval stays well under 5 s', () => {
+    expect(GATEWAY_POLL_INTERVAL_MS).toBe(100);
+    expect(4500 + GATEWAY_POLL_INTERVAL_MS).toBeLessThanOrEqual(4600);
   });
 
   it('gates run with the scaled delays (GATEWAY_DELAY_SCALE=0.01)', () => {
@@ -68,11 +74,11 @@ async function buyPending(last4: string, capacity = 5) {
 
 describe('gateway request stored with its future answer', () => {
   it.each([
-    ['0001', true, 2000, 5000],
-    ['0002', false, 2000, 5000],
-    ['0003', true, 30000, 40000],
-    ['0004', false, 30000, 40000],
-    ['1234', false, 2000, 5000],
+    ['0001', true, 2000, 4500],
+    ['0002', false, 2000, 4500],
+    ['0003', true, 30000, 38000],
+    ['0004', false, 30000, 38000],
+    ['1234', false, 2000, 4500],
   ] as const)('%s: approved=%s, respond_at − purchase within the scaled range', async (last4, approved, min, max) => {
     const { ticket } = await buyPending(last4);
     const { rows } = await pool.query(
@@ -109,7 +115,7 @@ describe('processDueGatewayResponses (async delivery, R06/R08)', () => {
     await processDueGatewayResponses();
     expect((await getTicketById(pool, c.ticket.id))!.status).toBe('pending');
     expect((await getTicketById(pool, d.ticket.id))!.status).toBe('pending');
-    await sleep(350); // > 400 ms after purchase
+    await sleep(350); // > 380 ms after purchase
     await processDueGatewayResponses();
     expect((await getTicketById(pool, c.ticket.id))!.status).toBe('confirmed');
     expect((await getTicketById(pool, d.ticket.id))!.status).toBe('declined');

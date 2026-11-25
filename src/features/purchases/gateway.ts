@@ -16,14 +16,14 @@ interface SimulatedRule {
   maxMs: number;
 }
 
-/** Card number ending → simulated answer (brief). Any other ending: declined in 2–5 s. */
+/** Card number ending → simulated answer. Ranges sit inside the brief windows (2–5 s, 30–40 s) with margin for end-to-end checks. Any other ending: declined like 0002. */
 export const SIMULATED_RULES: Readonly<Record<string, SimulatedRule>> = {
-  '0001': { approved: true, minMs: 2000, maxMs: 5000 },
-  '0002': { approved: false, minMs: 2000, maxMs: 5000 },
-  '0003': { approved: true, minMs: 30000, maxMs: 40000 },
-  '0004': { approved: false, minMs: 30000, maxMs: 40000 },
+  '0001': { approved: true, minMs: 2000, maxMs: 4500 },
+  '0002': { approved: false, minMs: 2000, maxMs: 4500 },
+  '0003': { approved: true, minMs: 30000, maxMs: 38000 },
+  '0004': { approved: false, minMs: 30000, maxMs: 38000 },
 };
-export const DEFAULT_SIMULATED_RULE: SimulatedRule = { approved: false, minMs: 2000, maxMs: 5000 };
+export const DEFAULT_SIMULATED_RULE: SimulatedRule = { approved: false, minMs: 2000, maxMs: 4500 };
 
 /** Decides the simulated answer for a card: approval by ending, delay uniform in the range × delay scale. */
 export function decideSimulated(cardNumber: string, rng: () => number = Math.random): GatewayDecision {
@@ -77,7 +77,7 @@ export async function processDueGatewayResponses(): Promise<number> {
   });
 }
 
-export const GATEWAY_POLL_INTERVAL_MS = 200;
+export const GATEWAY_POLL_INTERVAL_MS = 100;
 
 /**
  * Starts the answer-delivery poller with the app (`onReady`) and stops it on `app.close()` (`onClose`,
