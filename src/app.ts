@@ -2,7 +2,8 @@ import Fastify, { type FastifyInstance } from 'fastify';
 import formbody from '@fastify/formbody';
 import cookie from '@fastify/cookie';
 import { registerAuth } from './features/auth/plugin.js';
-import { registerStubs } from './features/stubs.js';
+import { registerOrganizerEventRoutes } from './features/events/organizer-routes.js';
+import { registerPublicEventRoutes } from './features/events/public-routes.js';
 
 /**
  * Builds the HTTP app. Each feature exposes a Fastify plugin under src/features/<area>/
@@ -17,7 +18,8 @@ export async function buildApp(opts: { logger?: boolean } = {}): Promise<Fastify
 
   // --- feature plugins (keep one per line) ---
   registerAuth(app); // F01: session hook (request.user) + signup/login/logout; root level, not encapsulated
-  registerStubs(app); // F01: temporary / and /organizer (removed by F02)
+  registerPublicEventRoutes(app); // F02: showcase / and /events/:id (purchase slot)
+  registerOrganizerEventRoutes(app); // F02: /organizer area, event management page and its sections
 
   return app;
 }
